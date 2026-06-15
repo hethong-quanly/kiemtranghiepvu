@@ -1,4 +1,4 @@
-# Phần mềm Kiểm tra VKSND Khu vực 2026
+# Phần mềm Kiểm tra VKSND TP.CT 2026
 
 Hệ thống hỗ trợ công tác kiểm tra toàn diện của Viện Kiểm sát Nhân dân Khu vực - Thành phố Cần Thơ.
 
