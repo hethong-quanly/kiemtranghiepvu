@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phần mềm Kiểm tra VKSND Khu vực 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="fixed inset-0 bg-gradient-to-br from-[#1e3a8a] to-[#1e40af] z-[999] flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="bg-[#1e40af] text-white p-6 text-center">
+                <div class="flex justify-center mb-4">
+                    <div class="w-16 h-16 bg-white rounded-2xl p-1.5">
+                        <img src="https://vienkiemsat.cantho.gov.vn/files/images/logo-vks.png" 
+                             alt="Logo VKS" class="w-full h-full object-contain"
+                             onerror="this.src='https://via.placeholder.com/64?text=VKS'">
+                    </div>
+                </div>
+                <h2 class="text-2xl font-bold">Đăng nhập thành viên đoàn</h2>
+                <p class="text-blue-200 text-sm mt-1">VKSND Khu vực • Cần Thơ • 2026</p>
+            </div>
+
+            <div class="p-8">
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium text-slate-600 mb-1.5">Tên đăng nhập</label>
+                        <input type="text" id="username" required class="w-full px-4 py-3 border border-slate-300 rounded-2xl focus:outline-none focus:border-[#1e40af]" placeholder="ksv1 / truongdoan / admin">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-600 mb-1.5">Mật khẩu</label>
+                        <input type="password" id="password" required class="w-full px-4 py-3 border border-slate-300 rounded-2xl focus:outline-none focus:border-[#1e40af]">
+                    </div>
+                    <button type="submit" class="w-full bg-[#1e40af] hover:bg-[#1e3a8a] text-white font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-x-2">
+                        <i class="fa-solid fa-sign-in-alt"></i> <span>Đăng nhập</span>
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center text-xs text-slate-500">
+                    <p class="mb-1">Tài khoản demo:</p>
+                    <div class="text-left text-slate-600">
+                        <div><strong>ksv1</strong> / 123456 → Thành viên</div>
+                        <div><strong>truongdoan</strong> / admin2026 → Trưởng đoàn</div>
+                        <div><strong>admin</strong> / vks2026 → Admin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="vks-header text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-x-4">
+                    <div class="w-11 h-11 bg-white rounded-2xl p-1 flex items-center justify-center">
+                        <img src="https://vienkiemsat.cantho.gov.vn/files/images/logo-vks.png" alt="VKS" class="w-9 h-9 object-contain">
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">PHẦN MỀM KIỂM TRA 2026</h1>
+                        <p class="text-blue-200 text-sm -mt-1">VKSND Khu vực Cần Thơ</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-x-3">
+                    <!-- User Info -->
+                    <div id="user-info" class="hidden items-center gap-x-3 bg-white/10 px-4 py-1.5 rounded-3xl text-sm">
+                        <div>
+                            <span id="user-name" class="font-semibold"></span>
+                            <span id="user-role" class="text-blue-200 text-xs block -mt-0.5"></span>
+                        </div>
+                        <button onclick="logout()" class="px-3 py-1 bg-red-500/80 hover:bg-red-600 text-white text-xs rounded-2xl flex items-center gap-x-1">
+                            <i class="fa-solid fa-sign-out-alt"></i> <span>Thoát</span>
+                        </button>
+                    </div>
+
+                    <button onclick="showHelp()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-3xl text-sm flex items-center gap-x-2">
+                        <i class="fa-solid fa-question-circle"></i> <span>Hướng dẫn</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="max-w-screen-2xl mx-auto px-6 pt-4">
+        <div class="flex bg-white rounded-3xl p-1 shadow-sm border w-fit">
+            <button onclick="switchTab(0)" id="tab-0" class="nav-tab active px-5 py-2.5 rounded-3xl text-sm font-semibold flex items-center gap-x-2">
+                <i class="fa-solid fa-book"></i> <span>Hướng dẫn</span>
+            </button>
+            <button onclick="switchTab(1)" id="tab-1" class="nav-tab px-5 py-2.5 rounded-3xl text-sm font-semibold flex items-center gap-x-2">
+                <i class="fa-solid fa-list-check"></i> <span>Danh mục hồ sơ</span>
+            </button>
+            <button onclick="switchTab(2)" id="tab-2" class="nav-tab px-5 py-2.5 rounded-3xl text-sm font-semibold flex items-center gap-x-2">
+                <i class="fa-solid fa-tasks"></i> <span>Bảng kỹ năng</span>
+            </button>
+            <button onclick="switchTab(3)" id="tab-3" class="nav-tab px-5 py-2.5 rounded-3xl text-sm font-semibold flex items-center gap-x-2">
+                <i class="fa-solid fa-file-pen"></i> <span>Phiếu kiểm tra</span>
+            </button>
+            <button onclick="switchTab(4)" id="tab-4" class="nav-tab px-5 py-2.5 rounded-3xl text-sm font-semibold flex items-center gap-x-2">
+                <i class="fa-solid fa-history"></i> <span>Lịch sử kiểm tra</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-screen-2xl mx-auto px-6 pb-10">
+        <!-- Tab contents (simplified for package) -->
+        <div id="section-0" class="section active mt-6">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border">
+                <h2 class="text-2xl font-bold text-[#1e40af] mb-4">Hướng dẫn sử dụng</h2>
+                <div class="prose max-w-none text-sm">
+                    <p>Phần mềm hỗ trợ kiểm tra toàn diện VKSND Khu vực năm 2026.</p>
+                    <ul class="mt-4 space-y-2">
+                        <li><strong>Đăng nhập</strong> bằng tài khoản được cấp.</li>
+                        <li>Sử dụng <strong>Bảng kỹ năng</strong> để kiểm tra thực tế hồ sơ.</li>
+                        <li><strong>Phiếu kiểm tra</strong> dùng để ghi nhận kết quả tại chỗ.</li>
+                        <li><strong>Lịch sử kiểm tra</strong> xem các phiếu đã lưu (riêng tư theo thành viên, Trưởng đoàn xem được toàn bộ).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other sections will be populated by JS or you can expand -->
+        <div id="section-1" class="section mt-6">
+            <h2 class="text-xl font-bold mb-4">Danh mục hồ sơ bắt buộc</h2>
+            <div id="danh-muc-container" class="bg-white rounded-3xl p-6 shadow-sm border">
+                <!-- JS will render table here -->
+            </div>
+        </div>
+
+        <div id="section-2" class="section mt-6">
+            <h2 class="text-xl font-bold mb-4">Bảng kỹ năng kiểm tra</h2>
+            <div id="ky-nang-container" class="bg-white rounded-3xl p-6 shadow-sm border">
+                <!-- JS render -->
+            </div>
+        </div>
+
+        <div id="section-3" class="section mt-6">
+            <h2 class="text-xl font-bold mb-4">Phiếu kiểm tra hồ sơ</h2>
+            <!-- Form will be here (similar to previous version) -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border">
+                <p class="text-sm text-slate-600">Form phiếu kiểm tra động sẽ được load ở đây (có thể mở rộng từ phiên bản single-file).</p>
+                <button onclick="quickSaveDemoInspection()" class="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-2xl text-sm">Lưu phiếu demo (test)</button>
+            </div>
+        </div>
+
+        <div id="section-4" class="section mt-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-x-2">
+                <i class="fa-solid fa-history"></i> 
+                Lịch sử kiểm tra
+                <span id="history-role-badge" class="ml-2 text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded-2xl"></span>
+            </h2>
+            
+            <div class="bg-white rounded-3xl p-6 shadow-sm border">
+                <div id="history-container">
+                    <!-- JS will render history table here based on role -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
